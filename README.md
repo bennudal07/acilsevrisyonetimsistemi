@@ -50,6 +50,11 @@ Bu proje, bir acil servis yönetim sistemini simüle eden basit bir C programıd
 
 # Gereksinimler
 
-C derleyicisi 
+1. C derleyicisi;
+İnternet üzerinden uygulamaya gerek olmadan çalışan bir derleyici: Online C Compiler
 
-Standart C kütüphaneleri (stdio.h, stdlib.h, string.h, time.h)
+Windows bilgisayarda çalışması için: DevC++
+
+Tüm bilgisayarlarda çalışması için: Visual Studio
+
+2. Standart C kütüphaneleri (stdio.h, stdlib.h, string.h, time.h)
