@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,9 +25,14 @@ typedef struct {
     char poliklinik[MAX_STR];
     char doktor[MAX_STR];
     int siraNo;
-    int receteNo;  // Hasta kaydýyla birlikte oluþturulan reçete no
     int aktif; // 1: aktif, 0: silinmis
 } Hasta;
+
+// Recete bilgilerini tutan struct
+typedef struct {
+    char tcNo[12];
+    int receteNo;
+} Recete;
 
 // Poliklinik ve doktor eslestirmelerini tutan struct
 typedef struct {
@@ -36,20 +42,21 @@ typedef struct {
 
 // Global degiskenler
 Hasta hastalar[MAX_HASTA];
+Recete receteler[MAX_HASTA];
 int hastaCount = 0;
+int receteCount = 0;
 
 // Poliklinik ve doktor listesi
 PoliklinikDoktor poliklinikler[] = {
     {"Dahiliye", "Dr. Ahmet Yilmaz"},
-    {"Ortopedi", "Dr. Mehmet Kaya"},
+    {"Ortopedi", "Dr. Sultan Kaya"},
     {"Kardiyoloji", "Dr. Ayse Demir"},
     {"Noroloji", "Dr. Fatma Celik"},
-    {"Gogus", "Dr. Ali Yildiz"},
+    {"Gogus", "Dr. Gaye Yildiz"},
     {"Genel Cerrahi", "Dr. Zeynep Kara"},
     {"Cildiye", "Dr. Mustafa Sahin"},
     {"KBB", "Prf. Dr. Beste Yildiz"},
-    {"Pediatri", " Dr. Guney Alaca"}
-
+     {"Pediatri", " Dr. Guney Alaca"}
 };
 
 // Fonksiyon prototipleri
@@ -58,7 +65,7 @@ void yeniHastaKaydi();
 void hastaBilgisiGoruntule();
 void tumHastalariGoruntule();
 void hastaSil();
-void receteGoruntule();
+void receteOlustur();
 int rastgeleSayi(int min, int max);
 char* doktorBul(char* poliklinik);
 
@@ -85,7 +92,7 @@ int main() {
                 hastaSil();
                 break;
             case 5:
-                receteGoruntule();
+                receteOlustur();
                 break;
             case 0:
                 printf("Programdan cikiliyor...\n");
@@ -105,7 +112,7 @@ void menuGoster() {
     printf("2- Kayitli hastanin bilgilerini goruntule\n");
     printf("3- Kayitli tum hastalari goruntule\n");
     printf("4- Hasta sil\n");
-    printf("5- Kayitli hastanin recete bilgilerini goruntule\n");
+    printf("5- Kayitli hastaya recete olustur\n");
     printf("0- Cikis\n");
 }
 
@@ -125,7 +132,7 @@ char* doktorBul(char* poliklinik) {
         }
     }
     
-    return "Dr. Bulunamadý";  // Eger eslesen poliklinik bulunamazsa
+    return "Dr. Nobet";  // Eger eslesen poliklinik bulunamazsa
 }
 
 // Yeni hasta kaydi fonksiyonu
@@ -203,16 +210,12 @@ void yeniHastaKaydi() {
     // Rastgele sira no ata
     yeniHasta.siraNo = rastgeleSayi(1000, 9999);
     
-    // Rastgele reçete no ata (direkt kayýt sýrasýnda)
-    yeniHasta.receteNo = rastgeleSayi(100000, 999999);
-    
     // Hasta kaydet
     hastalar[hastaCount++] = yeniHasta;
     
     printf("\nHasta kaydi basariyla eklendi!\n");
     printf("Hasta Sira No: %d\n", yeniHasta.siraNo);
     printf("Atanan Doktor: %s\n", yeniHasta.doktor);
-    printf("Recete No: %d\n", yeniHasta.receteNo);
 }
 
 // Hasta bilgilerini goruntuleme fonksiyonu
@@ -243,7 +246,6 @@ void hastaBilgisiGoruntule() {
             printf("Poliklinik: %s\n", hastalar[i].poliklinik);
             printf("Doktor: %s\n", hastalar[i].doktor);
             printf("Sira No: %d\n", hastalar[i].siraNo);
-            printf("Recete No: RN%d\n", hastalar[i].receteNo);
             bulundu = 1;
             break;
         }
@@ -272,7 +274,6 @@ void tumHastalariGoruntule() {
             printf("Poliklinik: %s\n", hastalar[i].poliklinik);
             printf("Doktor: %s\n", hastalar[i].doktor);
             printf("Sira No: %d\n", hastalar[i].siraNo);
-            printf("Recete No: %d\n", hastalar[i].receteNo);
         }
     }
     
@@ -305,23 +306,29 @@ void hastaSil() {
     }
 }
 
-// Recete görüntüleme fonksiyonu
-void receteGoruntule() {
+// Recete olusturma fonksiyonu
+void receteOlustur() {
     char tcNo[12];
     int bulundu = 0;
     int i;
     
-    printf("\n=== RECETE BILGISI GORUNTULE ===\n");
+    printf("\n=== RECETE OLUSTUR ===\n");
     printf("Hasta TC No: ");
     scanf("%s", tcNo);
     
     for (i = 0; i < hastaCount; i++) {
         if (hastalar[i].aktif && strcmp(hastalar[i].tcNo, tcNo) == 0) {
-            printf("\n--- RECETE BILGILERI ---\n");
+            Recete yeniRecete;
+            strcpy(yeniRecete.tcNo, tcNo);
+            yeniRecete.receteNo = rastgeleSayi(100000, 999999);
+            
+            receteler[receteCount++] = yeniRecete;
+            
+            printf("\nRecete basariyla olusturuldu!\n");
             printf("Hasta: %s %s\n", hastalar[i].ad, hastalar[i].soyad);
-            printf("TC No: %s\n", hastalar[i].tcNo);
+            printf("Recete No: %d\n", yeniRecete.receteNo);
             printf("Doktor: %s\n", hastalar[i].doktor);
-            printf("Recete No: %d\n", hastalar[i].receteNo);
+            
             bulundu = 1;
             break;
         }
@@ -330,4 +337,4 @@ void receteGoruntule() {
     if (!bulundu) {
         printf("Hata: Bu TC No'ya ait hasta bulunamadi!\n");
     }
-}       
+}
