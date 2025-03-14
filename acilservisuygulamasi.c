@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -48,13 +47,13 @@ int receteCount = 0;
 
 // Poliklinik ve doktor listesi
 PoliklinikDoktor poliklinikler[] = {
-    {"Dahiliye", "Dr. Ahmet Yilmaz"},
-    {"Ortopedi", "Dr. Sultan Kaya"},
-    {"Kardiyoloji", "Dr. Ayse Demir"},
-    {"Noroloji", "Dr. Fatma Celik"},
-    {"Gogus", "Dr. Gaye Yildiz"},
-    {"Genel Cerrahi", "Dr. Zeynep Kara"},
-    {"Cildiye", "Dr. Mustafa Sahin"},
+   {"Dahiliye", "Dr. Suleyman Cetin"},
+    {"Ortopedi", "Dr. Sultan Pembe"},
+    {"Kardiyoloji", "Dr. Beril Koru"},
+    {"Noroloji", "Dr. Azra Batur"},
+    {"Gogus", "Dr. Gaye Zumrut"},
+    {"Genel Cerrahi", "Dr. Yusuf Can Cakmak"},
+    {"Cildiye", "Dr. Mustafa Ceylan"},
     {"KBB", "Prf. Dr. Beste Yildiz"},
      {"Pediatri", " Dr. Guney Alaca"}
 };
